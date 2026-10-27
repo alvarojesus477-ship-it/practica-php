@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./www:/var/www/html
+      - .:/var/www/html
     depends_on:
       db:
         condition: service_healthy
@@ -20,6 +20,7 @@ services:
       MYSQL_DATABASE: tablon_nuncios
     volumes:
       - db_data:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-plaquesea"]
       interval: 10s
