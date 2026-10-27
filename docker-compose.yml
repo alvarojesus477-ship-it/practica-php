@@ -1,0 +1,43 @@
+services:
+  web:
+    build: .
+    container_name: lamp_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./www:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: lamp_db
+    # Los valores deben coincidir con config.php
+    environment:
+      MYSQL_ROOT_PASSWORD: laquesea
+      MYSQL_DATABASE: tablon_nuncios
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-plaquesea"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: lamp_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      UPLOAD_LIMIT: 64M
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  db_data:
