@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Core\database;
+use App\Core\Database;
 use InvalidArgumentException;
 
 abstract class BaseModel
@@ -14,7 +14,7 @@ abstract class BaseModel
      * @param string   $table Tabla sobre la que opera el modelo
      */
     public function __construct(
-        protected database $db,
+        protected Database $db,
         protected string $table
     ) {
         // Validamos una sola vez; así toda consulta usa un nombre de tabla seguro
